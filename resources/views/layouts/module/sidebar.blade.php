@@ -44,7 +44,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="{{ route('produk.index') }}">
                 <i class="fa fa-circle-o nav-icon"></i>
                 <p>Product</p>
               </a>
