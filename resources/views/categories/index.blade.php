@@ -41,11 +41,11 @@
                 @csrf
                 <div class="form-group">
                   <label for="name">Category</label>
-                  <input class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" type="text" id="name" required>
+                  <input class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" name="name" type="text" id="name" required>
                 </div>
                 <div class="form-group">
                   <label for="description">Description</label>
-                  <textarea class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" name="description" id="description" rows="5" cols="5"></textarea>
+                  <textarea class="form-control {{ $errors->has('description') ? 'is-invalid':'' }}" name="description" id="description" rows="5" cols="5"></textarea>
                 </div>
 
               @slot('footer')
