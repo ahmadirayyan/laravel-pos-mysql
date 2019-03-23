@@ -21,4 +21,7 @@ Route::group(['middleware' => 'auth'], function() {
   ]);
   Route::resource('/produk', 'ProductController');
   Route::get('/home', 'HomeController@index')->name('home');
+  Route::resource('/role', 'RoleController')->except([
+    'create', 'show', 'edit', 'update'
+  ]);
 });
