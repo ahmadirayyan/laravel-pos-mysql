@@ -49,7 +49,7 @@
                 </div>
               </form>
               @endslot
-            @endcad
+            @endcard
           </div>
           <div class="col-md-8">
             @card
@@ -85,7 +85,7 @@
                       <td>
                         <form action="{{ route('role.destroy', $row->id)}}" method="post">
                           @csrf
-                          <input type="hidden" name="__method" value="delete">
+                          <input type="hidden" name="_method" value="delete">
                           <button class="btn btn-danger btn-sm"> <i class="fa fa-trash"></i> </button>
                         </form>
                       </td>
@@ -100,7 +100,7 @@
               </div>
 
               <div class="float-right">
-                { $role->links() !!}
+                {!! $role->links() !!}
               </div>
               @slot('footer')
 

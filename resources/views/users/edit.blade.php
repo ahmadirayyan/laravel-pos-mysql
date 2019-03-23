@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-  <title>Add new user</title>
+  <title>Edit user</title>
 @endsection
 
 @section('content')
@@ -10,13 +10,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Add new user</h1>
+            <h1 class="m-0 text-dark">Edit user</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"> <a href="{{ route('home') }}">Home</a> </li>
               <li class="breadcrumb-item"> <a href="{{ route('users.index') }}">User</a> </li>
-              <li class="breadcrumb-item active">Add new</li>
+              <li class="breadcrumb-item active">Edit</li>
             </ol>
           </div>
         </div>
@@ -38,36 +38,28 @@
                 @endalert
               @endif
 
-              <form action="{{ route('users.store') }}" method="post">
+              <form action="{{ route('users.update', $user->id) }}" method="post">
                 @csrf
+                <input type="hidden" name="_method" value="put">
                 <div class="form-group">
                   <label for="">Name</label>
-                  <input type="text" name="name" class="form-control {{ $errors->has('name') ? 'is-invalid': '' }}" required>
+                  <input type="text" name="name" class="form-control {{ $errors->has('name') ? 'is-invalid': '' }}" required value="{{ $user->name }}">
                   <p class="text-danger">{{ $errors->first('name') }}</p>
                 </div>
                 <div class="form-group">
                   <label for="">Email</label>
-                  <input type="email" name="email" class="form-control {{ $errors->has('email') ? 'is-invalid': '' }}" required>
+                  <input type="email" name="email" class="form-control {{ $errors->has('email') ? 'is-invalid': '' }}" required readonly value="{{ $user->email }}">
                   <p class="text-danger">{{ $errors->first('email') }}</p>
                 </div>
                 <div class="form-group">
                   <label for="">Password</label>
-                  <input type="password" name="password" class="form-control {{ $errors->has('password') ? 'is-invalid': '' }}" required>
+                  <input type="password" name="password" class="form-control {{ $errors->has('password') ? 'is-invalid': '' }}">
                   <p class="text-danger">{{ $errors->first('password') }}</p>
-                </div>
-                <div class="form-group">
-                  <label for="">Role</label>
-                  <select name="role" class="form-control {{ $errors->has('role') ? 'is-invalid': '' }}" required>
-                    <option value="">Choose</option>
-                    @foreach ($role as $row)
-                      <option value="{{ $row->name}}">{{ $row->name }}</option>
-                    @endforeach
-                  </select>
-                  <p class="text-danger">{{ $errors->first('role') }}</p>
+                  <p class="text-warning">Keep this empty, if you don't want to change password</p>
                 </div>
                 <div class="form-group">
                   <button class="btn btn-primary btn-sm">
-                    <i class="fa fa-send"></i> Save
+                    <i class="fa fa-send"></i> Update
                   </button>
                 </div>
               </form>
