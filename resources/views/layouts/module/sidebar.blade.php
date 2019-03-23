@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a class="brand-link" href="index3.html">
+  <a class="brand-link" href="home">
     <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="POS" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">POS</span>
   </a>
@@ -50,6 +50,15 @@
               </a>
             </li>
           </ul>
+        </li>
+        <li class="nav-item has-treeview">
+          <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="nav-icon fa fa-sign-out"></i>
+            <p> {{ __('Logout') }} </p>
+          </a>
+          <form action="{{ route('logout') }}" method="post" id="logout-form" style="display: none">
+            @csrf
+          </form>
         </li>
       </ul>
     </nav>
