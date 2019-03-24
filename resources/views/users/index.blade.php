@@ -71,7 +71,7 @@
                       <td>
                         <form action="{{ route('users.destroy', $row->id) }}" method="post">
                           @csrf
-                          <input type="hidden" name="__method" value="delete">
+                          <input type="hidden" name="_method" value="delete">
                           <a href="{{ route('users.roles', $row->id) }}" class="btn btn-info btn-sm"> <i class="fa fa-user-secret"></i> </a>
                           <a href="{{ route('users.edit', $row->id) }}" class="btn btn-warning btn-sm"> <i class="fa fa-edit"></i> </a>
                           <button class="btn btn-danger btn-sm"> <i class="fa fa-trash"></i> </button>
