@@ -37,9 +37,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('/produk', 'ProductController');
   });
 
-  Route::group(['middleware' => ['role:kasir']], function() {
-
+  Route::group(['middleware' => ['role:cashier']], function() {
+    Route::get('/transaksi', 'OrderController@addOrder')->name('order.transaksi');
   });
 
-  Route::get('/home', 'HomeController@index')->name('home');
+  Route::get('/home', 'HomeController@index')->name('home');  
 });
