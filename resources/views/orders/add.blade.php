@@ -18,7 +18,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"> <a href="#">Home</a> </li>
+              <li class="breadcrumb-item"> <a href="{{ route('home') }}">Home</a> </li>
               <li class="breadcrumb-item active">Transaction</li>
             </ol>
           </div>
@@ -37,24 +37,26 @@
 
               <div class="row">
                 <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="">Product</label>
-                    <select name="product_id" id="product_id" class="form-control" width="100%" required>
-                      <option value="">Choose</option>
-                      @foreach ($products as $product)
-                        <option value="{{ $product->id }}">{{ $product->code }} - {{ $product->name }}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="">Quantity</label>
-                    <input type="number" name="qty" id="qty" value="1" min="1" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <button class="btn btn-primary btn-sm">
-                      <i class="fa fa-shopping-cart"></i> Add to cart
-                    </button>
-                  </div>
+                  <form action="#" @submit.prevent="addToCart" method="post">
+                    <div class="form-group">
+                      <label for="">Product</label>
+                      <select name="product_id" id="product_id" class="form-control" width="100%" required>
+                        <option value="">Choose</option>
+                        @foreach ($products as $product)
+                          <option value="{{ $product->id }}">{{ $product->code }} - {{ $product->name }}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="">Quantity</label>
+                      <input type="number" name="qty" id="qty" value="1" min="1" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-primary btn-sm">
+                        <i class="fa fa-shopping-cart"></i> Add to cart
+                      </button>
+                    </div>
+                  </form>
                 </div>
                 <div class="col-md-5">
                   <h4>Product Detail</h4>
@@ -84,6 +86,41 @@
               </div>
               @slot('footer')
 
+              @endslot
+            @endcard
+          </div>
+          <div class="col-md-4">
+            @card
+              @slot('title')
+                Cart
+              @endslot
+
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(row, index) in shoppingCart">
+                    <td>@{{ row.name }} (@{{ row.code }})</td>
+                    <td>@{{ row.price }} | currency</td>
+                    <td>@{{ row.qty }}</td>
+                    <td>
+                      <button @click.prevent="removeCart(index)" class="btn btn-danger btn-sm"> <i class="fa fa-trash"></i> </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              @slot('footer')
+                <div class="card-footer text-muted">
+                  <a href="{{ route('order.checkout') }}" class="btn btn-info btn-sm float-right">
+                    Checkout
+                  </a>
+                </div>
               @endslot
             @endcard
           </div>
