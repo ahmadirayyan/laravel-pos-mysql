@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
+use App\Order_detail;
 use App\Product;
+use Cookie;
+use DB;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -60,5 +64,84 @@ class OrderController extends Controller
       $cart = json_decode(request()->cookie('cart'), true);
       unset($cart[$id]);
       return response()->json($cart, 200)->cookie('cart', json_encode($cart), 120);
+    }
+
+    public function checkout()
+    {
+      return view('orders.checkout');
+    }
+
+    public function storeOrder(Request $request)
+    {
+      $this->validate($request, [
+        'email' => 'required|email',
+        'name' => 'required|string|max:100',
+        'phone' => 'required|numeric',
+        'address' => 'required'
+      ]);
+
+      $cart = json_decode($request->cookie('cart'), true);
+      $result = collect($cart)->map(function($value) {
+        return [
+          'code' => $value['code'],
+          'name' => $value['name'],
+          'qty' => $value['qty'],
+          'price' => $value['price'],
+          'result' => $value['price'] * $value['qty']
+        ];
+      })->all();
+
+      DB::beginTransaction();
+      try {
+        $customer = Customer::firstOrCreate([
+          'email' => $request->email
+        ], [
+          'name' => $request->name,
+          'address' => $request->address,
+          'phone' => $request->phone
+        ]);
+
+        $order = Order::create([
+          'invoice' => $this->generateInvoice(),
+          'customer_id' => $customer->id,
+          'user_id' => auth()->user()->id,
+          'total' => array_sum(array_column($result, 'result'))
+        ]);
+
+        foreach ($result as $key => $row) {
+          $order->order_detail()->create([
+            'product_id' => $key,
+            'qty' => $row['qty'],
+            'price' => $row['price']
+          ]);
+        }
+
+        DB:commit();
+
+        return response()->json([
+          'status' => 'success',
+          'message' => $order->invoice
+        ], 200)->cookie(Cookie::forget('cart'));
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json([
+          'status' => 'failed',
+          'message' => $e->getMessage()
+        ], 400);
+      }
+    }
+
+    public function generateInvoice()
+    {
+      $order = Order::orderBy('created_at', 'DESC');
+
+      if ($order->count() > 0) {
+        $order = $order->first();
+        $explode = explode('-', $order->invoice);
+
+        return 'INV-' . $explode[1]+1;
+      }
+
+      return 'INV-1';
     }
 }

@@ -21,13 +21,31 @@ new Vue({
       product_id: '',
       qty: '1'
     },
+    customer: {
+      email: ''
+    },
     shoppingCart: [],
-    submitCart: false
+    submitCart: false,
+    formCustomer: false,
+    resultStatus: false,
+    submitForm: false,
+    errorMessage: '',
+    message: ''
   },
   watch: {
-    'cart.product_id' : function() {
+    'cart.product_id': function() {
       if (this.cart.product_id) {
         this.getProduct()
+      }
+    },
+    'customer.email': function() {
+      this.formCustomer = false
+      if (this.customer.name != '') {
+        this.customer = {
+          name: '',
+          phone: '',
+          address: ''
+        }
       }
     }
   },
@@ -98,6 +116,64 @@ new Vue({
           })
         }
       })
+    },
+    searchCustomer() {
+      axios.post('/api/customer/search', {
+        email: this.customer.email
+      }).then((response) => {
+        if (response.data.status == 'success') {
+          this.customer = response.data.data
+          this.resultStatus = true
+        }
+        this.formCustomer = true
+      }).catch((error) => {
+
+      })
+    },
+    sendOrder() {
+      this.errorMessage = ''
+      this.message = ''
+
+      if (this.customer.email != '' && this.customer.name != '' && this.customer.phone != '' && this.customer.address != '') {
+        this.$swal({
+          title: 'Are you sure?',
+          text: 'You can\'t undo this action!',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'Cancel',
+          showCloseButton: true,
+          showLoaderOnConfirm: true,
+          preConfirm: () => {
+            return new Promise((resolve) => {
+              setTimeout(() => {
+                resolve()
+              }, 2000)
+            })
+          },
+          allowOutsideClick: () => !this.$swal.isLoading()
+        }).then ((result) => {
+          if (result.value) {
+            this.submitForm = true
+            axios.post('/checkout', this.customer).then((response) => {
+              setTimeout(() => {
+                this.getCart();
+                this.message = response.data.message
+                this.customer = {
+                  name: '',
+                  phone: '',
+                  address: ''
+                }
+                this.submitForm = false
+              }, 1000)
+            }).catch((error) => {
+              console.log(error)
+            })
+          }
+        })
+      } else {
+        this.errorMessage = "Please fill all required data."
+      }
     }
   }
 })
