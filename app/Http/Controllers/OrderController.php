@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
 use App\Order;
-use App\Order_detail;
 use App\Product;
 use Cookie;
 use DB;
@@ -76,8 +76,8 @@ class OrderController extends Controller
       $this->validate($request, [
         'email' => 'required|email',
         'name' => 'required|string|max:100',
-        'phone' => 'required|numeric',
-        'address' => 'required'
+        'address' => 'required',
+        'phone' => 'required|numeric'
       ]);
 
       $cart = json_decode($request->cookie('cart'), true);
@@ -116,7 +116,7 @@ class OrderController extends Controller
           ]);
         }
 
-        DB:commit();
+        DB::commit();
 
         return response()->json([
           'status' => 'success',
@@ -138,8 +138,8 @@ class OrderController extends Controller
       if ($order->count() > 0) {
         $order = $order->first();
         $explode = explode('-', $order->invoice);
-
-        return 'INV-' . $explode[1]+1;
+        $count = $explode[1] + 1;
+        return 'INV-' . $count;
       }
 
       return 'INV-1';
