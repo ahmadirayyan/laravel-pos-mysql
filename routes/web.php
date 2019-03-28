@@ -37,10 +37,13 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('/produk', 'ProductController');
   });
 
-  Route::group(['middleware' => ['role:cashier']], function() {
+  Route::group(['middleware' => ['role:admin,cashier']], function() {
     Route::get('/transaksi', 'OrderController@addOrder')->name('order.transaksi');
     Route::get('/checkout', 'OrderController@checkout')->name('order.checkout');
     Route::post('/checkout', 'OrderController@storeOrder')->name('order.storeOrder');
+    Route::get('/order', 'OrderController@index')->name('order.index');
+    Route::get('/order/pdf/{invoice}', 'OrderController@invoicePdf')->name('order.pdf');
+    Route::get('/order/excel/{invoice}', 'OrderController@invoiceExcel')->name('order.excel');
   });
 
   Route::get('/home', 'HomeController@index')->name('home');

@@ -97,6 +97,24 @@
         @endrole
 
         <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fa fa-shopping-bag"></i>
+            <p>
+              Order Management
+              <i class="right fa fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('order.index') }}" class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Order</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item has-treeview">
           <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="nav-icon fa fa-sign-out"></i>
             <p> {{ __('Logout') }} </p>
