@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Cookie;
 use DB;
 use Illuminate\Http\Request;
+use PDF;
 
 class OrderController extends Controller
 {
@@ -224,7 +225,10 @@ class OrderController extends Controller
 
     public function invoicePdf($invoice)
     {
+      $order = Order::where('invoice', $invoice)->with('customer', 'order_detail', 'order_detail.product')->first();
+      $pdf = PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif'])->loadView('orders.report.invoice', compact('order'));
 
+      return $pdf->stream();
     }
 
     public function invoiceExcel($invoice)
