@@ -62,7 +62,7 @@
                       <label for="">Cashier</label>
                       <select name="user_id" class="form-control">
                         <option value="">Choose</option>
-                        @foreach
+                        @foreach ($users as $user)
                           <option value="{{ $user->id }}" {{ request()->get('user_id') == $user->id ? 'selected': '' }}>
                             {{ $user->name }} - {{ $user->email}}
                           </option>
@@ -87,7 +87,7 @@
                 <div class="col-4">
                   <div class="small-box bg-info">
                     <div class="inner">
-                      <h4>{{ $sold }}</h4>
+                      <h3>{{ $sold }}</h3>
                       <p>Sold Items</p>
                     </div>
                     <div class="icon">
@@ -133,26 +133,26 @@
                   </thead>
                   <tbody>
                     @forelse ($orders as $row)
-                    <tr>
-                      <td><strong>#{{ $row->invoice }}</strong></td>
-                      <td>{{ $row->customer->name }}</td>
-                      <td>{{ $row->customer->phone}}</td>
-                      <td>Rp {{ number_format($row->total) }}</td>
-                      <td>{{ $row->user->name }}</td>
-                      <td>{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
-                      <td>
-                        <a href="{{ route('order.pdf', $row->invoice) }}" target="_blank" class="btn btn-primary btn-sm">
-                          <i class="fa fa-print"></i>
-                        </a>
-                        <a href="{{ route('order.excel', $row->invoice) }}" target="_blank" class="btn btn-info btn-sm">
-                          <i class="fa fa-file-excel-o"></i>
-                        </a>
-                      </td>
-                    </tr>
+                      <tr>
+                        <td><strong>#{{ $row->invoice }}</strong></td>
+                        <td>{{ $row->customer->name }}</td>
+                        <td>{{ $row->customer->phone}}</td>
+                        <td>Rp {{ number_format($row->total) }}</td>
+                        <td>{{ $row->user->name }}</td>
+                        <td>{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
+                        <td>
+                          <a href="{{ route('order.pdf', $row->invoice) }}" target="_blank" class="btn btn-primary btn-sm">
+                            <i class="fa fa-print"></i>
+                          </a>
+                          <a href="{{ route('order.excel', $row->invoice) }}" target="_blank" class="btn btn-info btn-sm">
+                            <i class="fa fa-file-excel-o"></i>
+                          </a>
+                        </td>
+                      </tr>
                     @empty
-                    <tr>
-                      <td class="text-center" colspan="7">No data</td>
-                    </tr>
+                      <tr>
+                        <td class="text-center" colspan="7">No data</td>
+                      </tr>
                     @endforelse
                   </tbody>
                 </table>

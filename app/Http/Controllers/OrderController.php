@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Exports\OrderInvoice;
 use App\Order;
 use App\Product;
 use App\User;
@@ -48,7 +49,7 @@ class OrderController extends Controller
         'sold' => $this->countItem($orders),
         'total' => $this->countTotal($orders),
         'total_customer' => $this->countCustomer($orders),
-        'customer' => $customers,
+        'customers' => $customers,
         'users' => $users
       ]);
     }
@@ -191,7 +192,7 @@ class OrderController extends Controller
       $customer = [];
       if ($orders->count() > 0) {
         foreach ($orders as $row) {
-          $customer[] $row->customer->email;
+          $customer[] = $row->customer->email;
         }
       }
 
@@ -233,6 +234,6 @@ class OrderController extends Controller
 
     public function invoiceExcel($invoice)
     {
-
+      return (new OrderInvoice($invoice))->download('invoice-' . $invoice . '.xlsx');
     }
 }

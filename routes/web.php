@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('/produk', 'ProductController');
   });
 
-  Route::group(['middleware' => ['role:admin,cashier']], function() {
+  Route::group(['middleware' => ['role:admin|cashier']], function() {
     Route::get('/transaksi', 'OrderController@addOrder')->name('order.transaksi');
     Route::get('/checkout', 'OrderController@checkout')->name('order.checkout');
     Route::post('/checkout', 'OrderController@storeOrder')->name('order.storeOrder');
