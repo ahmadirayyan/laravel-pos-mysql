@@ -36,8 +36,8 @@ class OrderController extends Controller
           'end_date' => 'nullable|date'
         ]);
 
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d') . '00:00:00';
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d') . '23:59:59';
+        $start_date = Carbon::parse($request->start_date)->format('Y-m-d') . ' 00:00:00';
+        $end_date = Carbon::parse($request->end_date)->format('Y-m-d') . ' 23:59:59';
 
         $orders = $orders->whereBetween('created_at', [$start_date, $end_date])->get();
       } else {
