@@ -87,7 +87,7 @@
         </li>
         @endrole
 
-        @role('cashier')
+        @role('cashier|admin')
           <li class="nav-item">
             <a href="{{ route('order.transaksi') }}" class="nav-link">
               <i class="nav-icon fa fa-shopping-cart"></i>
